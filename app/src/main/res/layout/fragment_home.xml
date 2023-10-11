@@ -31,6 +31,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:layout_marginVertical="8dp"
         android:layout_marginStart="24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,6 +43,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"/>
     <TextView
+        android:layout_marginVertical="8dp"
         android:layout_marginStart="24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,6 +54,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:itemCount="5"
+        tools:listitem="@layout/product_item"/>
 
 
 
