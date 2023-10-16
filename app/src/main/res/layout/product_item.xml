@@ -57,17 +57,6 @@
             app:layout_constraintEnd_toStartOf="@+id/product_item_price"
             app:layout_constraintTop_toTopOf="@+id/product_item_price" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/product_item_cart_civ"
-            android:layout_marginHorizontal="2dp"
-            android:layout_width="wrap_content"
-            android:clickable="true"
-            android:background="?attr/selectableItemBackground"
-            android:layout_height="wrap_content"
-            android:src="@drawable/cart_not_selected_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/product_item_saved"
-            app:layout_constraintEnd_toStartOf="@+id/product_item_saved"
-            app:layout_constraintTop_toTopOf="@+id/product_item_saved" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
