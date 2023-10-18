@@ -32,7 +32,7 @@ class HomeFragment : Fragment() {
         api.getAll().enqueue(object : Callback<ProductData>{
             override fun onResponse(call: Call<ProductData>, response: Response<ProductData>) {
                 val products = response.body()?.products!!
-                binding.homeAllRv.adapter = ProductsAdapter(products)
+                binding.homeAllRv.adapter = ProductsAdapter(products, requireContext())
             }
 
             override fun onFailure(call: Call<ProductData>, t: Throwable) {

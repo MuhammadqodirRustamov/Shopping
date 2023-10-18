@@ -1,8 +1,10 @@
 package uz.itschool.shopping.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +13,7 @@ import uz.itschool.shopping.R
 import uz.itschool.shopping.model.Product
 import kotlin.math.roundToInt
 
-class ProductsAdapter(var products:List<Product>) : RecyclerView.Adapter<ProductsAdapter.MyHolder>() {
+class ProductsAdapter(var products:List<Product>, val context: Context) : RecyclerView.Adapter<ProductsAdapter.MyHolder>() {
     class MyHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val image : ImageView = itemView.findViewById(R.id.product_item_image)
         val title : TextView = itemView.findViewById(R.id.product_item_title)
@@ -35,6 +37,8 @@ class ProductsAdapter(var products:List<Product>) : RecyclerView.Adapter<Product
         holder.rating.text = ((product.rating*10).roundToInt().toDouble()/10).toString()
         holder.title.text = product.title
         holder.price.text = product.price.toString() + " $"
+        val anim = AnimationUtils.loadAnimation(context, R.anim.appear)
+        holder.itemView.startAnimation(anim)
     }
 
 
