@@ -4,20 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:animateLayoutChanges="true"
     android:background="@drawable/home_back_grad"
     android:layout_height="match_parent"
     tools:context=".ui.HomeFragment">
 
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/home_search_view"
-        app:queryHint="Search product"
-        app:iconifiedByDefault="false"
-        app:defaultQueryHint="Search product"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_marginTop="12dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/home_search_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:defaultQueryHint="Search product"
+            app:iconifiedByDefault="false"
+            app:layout_constraintEnd_toStartOf="@+id/home_filter_fab"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/home_filter_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            app:backgroundTint="@color/blue2"
+            app:tint="@color/white"
+            app:elevation="2dp"
+            app:fabCustomSize="46dp"
+            android:src="@drawable/filter_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_category_rv"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
