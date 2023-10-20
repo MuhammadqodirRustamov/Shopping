@@ -30,7 +30,7 @@ class SharedPrefHelper private constructor(context: Context){
     fun getUser():User?{
         var data = shared.getString("user", "")
         if (data == "") return null
-        val typeToken = object : TypeToken<User> {}.type
+        val typeToken = object : TypeToken<User>() {}.type
         return gson.fromJson(data, typeToken)
     }
 

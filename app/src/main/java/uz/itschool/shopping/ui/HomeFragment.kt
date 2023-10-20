@@ -1,5 +1,6 @@
 package uz.itschool.shopping.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -28,6 +29,8 @@ import uz.itschool.shopping.service.SharedPrefHelper
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     var lastSearch = ""
+
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,18 +41,10 @@ class HomeFragment : Fragment() {
         binding.homeCategoryRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-
         val api = APIClient.getInstance().create(APIService::class.java)
         val shared = SharedPrefHelper.getInstance(requireContext())
         val user = shared.getUser()
-        if (shared != null) binding.homeAvatarIv.load(user.image)
-
-        binding.homeAvatarIv.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putSerializable("user", user)
-            findNavController().navigate(R.id.action_productFragment_to_userFragment, bundle)
-        }
-
+        if (user != null) binding.homeAvatarIv.load(user.image)
 
         api.getAll().enqueue(object : Callback<ProductData> {
             override fun onResponse(call: Call<ProductData>, response: Response<ProductData>) {
@@ -71,7 +66,7 @@ class HomeFragment : Fragment() {
                     object : CategoryAdapter.CategoryPressed {
                         override fun onPressed(category: String) {
                             if (category == "") {
-                                api.getAll().enqueue(object : Callback<ProductData>{
+                                api.getAll().enqueue(object : Callback<ProductData> {
                                     override fun onResponse(
                                         call: Call<ProductData>,
                                         response: Response<ProductData>
@@ -111,11 +106,12 @@ class HomeFragment : Fragment() {
 
         })
 
+
         binding.homeSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query == lastSearch) return false
 
-                api.search(query!!).enqueue(object : Callback<ProductData>{
+                api.search(query!!).enqueue(object : Callback<ProductData> {
                     override fun onResponse(
                         call: Call<ProductData>,
                         response: Response<ProductData>
@@ -140,11 +136,11 @@ class HomeFragment : Fragment() {
 
         })
 
-
-
-
-
-
+        binding.homeAvatarIv.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable("user", user)
+            findNavController().navigate(R.id.action_homeFragment_to_userFragment, bundle)
+        }
         binding.homeFilterFab.setOnClickListener {
             if (binding.homeCategoryRv.isVisible) binding.homeCategoryRv.visibility = View.GONE
             else binding.homeCategoryRv.visibility = View.VISIBLE
