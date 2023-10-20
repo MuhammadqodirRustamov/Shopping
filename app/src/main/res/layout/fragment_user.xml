@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.UserFragment">
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -10,47 +11,51 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:id="@+id/product_screen_back_fab"
-        android:backgroundTint="@color/gray_transparent"
+        android:id="@+id/user_back_fab"
+        app:rippleColor="@color/gray_40"
+        android:backgroundTint="@color/white"
         android:src="@drawable/back_icon"
         app:elevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Account"
         android:textSize="28sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/product_screen_back_fab"
+        app:layout_constraintBottom_toBottomOf="@+id/user_back_fab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/product_screen_back_fab" />
+        app:layout_constraintTop_toTopOf="@+id/user_back_fab" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/user_account_info_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
         android:layout_marginTop="16dp"
-        android:orientation="vertical"
+        android:layout_marginHorizontal="32dp"
         android:gravity="center_horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/product_screen_back_fab">
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/user_back_fab"
+        tools:layout_editor_absoluteX="32dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/user_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/avatar_icon"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/avatar_icon" />
+
         <TextView
             android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Firstname Lastname"
-            android:textStyle="bold"
-            android:textSize="28sp" />
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/user_username"
@@ -67,14 +72,14 @@
             android:textSize="20sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:paddingHorizontal="42dp"
             android:id="@+id/user_my_cart_mb"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="My Cart"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/blue2"
-            app:icon="@drawable/cart_icon"/>
+            android:paddingHorizontal="42dp"
+            android:text="My Cart"
+            app:icon="@drawable/cart_icon" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <ImageView

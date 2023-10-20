@@ -24,21 +24,40 @@ private const val ARG_PARAM1 = "product"
 
 class ProductFragment : Fragment() {
     private lateinit var product: Product
+    private lateinit var binding: FragmentProductBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             product = it.getSerializable(ARG_PARAM1) as Product
         }
     }
-    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentProductBinding.inflate(inflater, container, false)
+        binding = FragmentProductBinding.inflate(inflater, container, false)
+        handleBackPress()
+        setView()
+
+        return binding.root
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setView() {
+        binding.productIamgeVp.adapter =
+            ImageAdapter(product.images, binding.productIamgeVp, binding.productParentConstraint)
         binding.productScreenBackFab.setOnClickListener {
             requireActivity().onBackPressed()
         }
+        binding.productScreenTitle.text = product.title
+        binding.productScreenBrand.text = product.brand
+        binding.productScreenPrice.text = product.price.toString() + " $"
+        binding.productScreenDescription.text = product.description
+        binding.productScreenRating.text =
+            ((product.rating * 10).roundToInt().toDouble() / 10).toString()
+    }
+
+    private fun handleBackPress() {
         requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (binding.productIamgeVp.layoutParams.height == LayoutParams.MATCH_PARENT) {
@@ -51,23 +70,6 @@ class ProductFragment : Fragment() {
                 }
             }
         })
-        binding.productIamgeVp.adapter =
-            ImageAdapter(product.images, binding.productIamgeVp, binding.productParentConstraint)
-
-
-
-        binding.productScreenTitle.text = product.title
-        binding.productScreenBrand.text = product.brand
-        binding.productScreenPrice.text = product.price.toString() + " $"
-        binding.productScreenDescription.text = product.description
-        binding.productScreenRating.text =
-            ((product.rating * 10).roundToInt().toDouble() / 10).toString()
-
-
-
-
-
-        return binding.root
     }
 
     fun Int.toPx(context: Context) =

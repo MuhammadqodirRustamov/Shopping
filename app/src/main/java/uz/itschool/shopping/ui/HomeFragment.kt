@@ -22,6 +22,7 @@ import uz.itschool.shopping.adapter.ProductsAdapter
 import uz.itschool.shopping.databinding.FragmentHomeBinding
 import uz.itschool.shopping.model.Product
 import uz.itschool.shopping.model.ProductData
+import uz.itschool.shopping.model.User
 import uz.itschool.shopping.networking.APIClient
 import uz.itschool.shopping.networking.APIService
 import uz.itschool.shopping.service.SharedPrefHelper
@@ -29,6 +30,8 @@ import uz.itschool.shopping.service.SharedPrefHelper
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     var lastSearch = ""
+    private var user: User? = null
+    val api: APIService = APIClient.getInstance().create(APIService::class.java)
 
     @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
@@ -41,21 +44,24 @@ class HomeFragment : Fragment() {
         binding.homeCategoryRv.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        val api = APIClient.getInstance().create(APIService::class.java)
+
+        checkUser()
+        setAllProducts()
+        setCategories()
+//        setSearchListener()
+        setAvatarClickListener()
+        setFilterListener()
+
+        return binding.root
+    }
+
+    private fun checkUser() {
         val shared = SharedPrefHelper.getInstance(requireContext())
-        val user = shared.getUser()
-        if (user != null) binding.homeAvatarIv.load(user.image)
+        user = shared.getUser()
+        if (user != null) binding.homeAvatarIv.load(user!!.image)
+    }
 
-        api.getAll().enqueue(object : Callback<ProductData> {
-            override fun onResponse(call: Call<ProductData>, response: Response<ProductData>) {
-                val products = response.body()?.products!!
-                changeProductsAdapter(products)
-            }
-
-            override fun onFailure(call: Call<ProductData>, t: Throwable) {
-                Log.d("TAG", "$t")
-            }
-        })
+    private fun setCategories() {
         api.getCategories().enqueue(object : Callback<List<String>> {
             override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
                 val categories = response.body()!!
@@ -105,48 +111,58 @@ class HomeFragment : Fragment() {
             }
 
         })
+    }
 
-
-        binding.homeSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query == lastSearch) return false
-
-                api.search(query!!).enqueue(object : Callback<ProductData> {
-                    override fun onResponse(
-                        call: Call<ProductData>,
-                        response: Response<ProductData>
-                    ) {
-                        val products = response.body()!!.products
-                        changeProductsAdapter(products)
-                    }
-
-                    override fun onFailure(call: Call<ProductData>, t: Throwable) {
-                        Log.d("TAG", "$t")
-                    }
-
-                })
-                lastSearch = query
-
-                return true
+    private fun setAllProducts() {
+        api.getAll().enqueue(object : Callback<ProductData> {
+            override fun onResponse(call: Call<ProductData>, response: Response<ProductData>) {
+                val products = response.body()?.products!!
+                changeProductsAdapter(products)
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
+            override fun onFailure(call: Call<ProductData>, t: Throwable) {
+                Log.d("TAG", "$t")
             }
-
         })
+    }
 
+//    private fun setSearchListener() {
+//        binding.homeSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                if (query == lastSearch) return false
+//                api.search(query!!).enqueue(object : Callback<ProductData> {
+//                    override fun onResponse(
+//                        call: Call<ProductData>,
+//                        response: Response<ProductData>
+//                    ) {
+//                        val products = response.body()!!.products
+//                        changeProductsAdapter(products)
+//                    }
+//
+//                    override fun onFailure(call: Call<ProductData>, t: Throwable) {
+//                        Log.d("TAG", "$t")
+//                    }
+//
+//                })
+//                lastSearch = query
+//                return true
+//            }
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                return true
+//            }
+//        })
+//    }
+
+    private fun setAvatarClickListener() {
         binding.homeAvatarIv.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putSerializable("user", user)
-            findNavController().navigate(R.id.action_homeFragment_to_userFragment, bundle)
+            findNavController().navigate(R.id.action_homeFragment_to_userFragment)
         }
+    }
+    private fun setFilterListener(){
         binding.homeFilterFab.setOnClickListener {
             if (binding.homeCategoryRv.isVisible) binding.homeCategoryRv.visibility = View.GONE
             else binding.homeCategoryRv.visibility = View.VISIBLE
         }
-
-        return binding.root
     }
 
     fun changeProductsAdapter(products: List<Product>) {

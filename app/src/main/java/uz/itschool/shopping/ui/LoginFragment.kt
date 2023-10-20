@@ -1,60 +1,84 @@
 package uz.itschool.shopping.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import uz.itschool.shopping.R
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import uz.itschool.shopping.databinding.FragmentLoginBinding
+import uz.itschool.shopping.model.Login
+import uz.itschool.shopping.model.Product
+import uz.itschool.shopping.model.User
+import uz.itschool.shopping.networking.APIClient
+import uz.itschool.shopping.networking.APIService
+import uz.itschool.shopping.service.SharedPrefHelper
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_PARAM1 = "product"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [LoginFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class LoginFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var product : Product? = null
+    private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+    ): View {
+        binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        setLoginClickedListener()
+        setBackButtonListener()
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LoginFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LoginFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private fun setBackButtonListener() {
+        binding.loginBackFab.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+    }
+
+    private fun setLoginClickedListener() {
+        binding.loginLoginMb.setOnClickListener {
+            val username : String = binding.loginUsername.text.toString()
+            val password : String = binding.loginPassword.text.toString()
+            if (username == "" || password == "") {
+                Toast.makeText(requireContext(), "Complete the fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+            val api = APIClient.getInstance().create(APIService::class.java)
+            api.login(Login(username, password)).enqueue(object : Callback<User>{
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    if (!response.isSuccessful) {
+                        Toast.makeText(requireContext(), "Incorrect login or password", Toast.LENGTH_SHORT).show()
+                        binding.loginPassword.setText("")
+                        return
+                    }
+                    if (product == null){
+                        val shared = SharedPrefHelper.getInstance(requireContext())
+                        val user = response.body()!!
+                        shared.setUser(user)
+                        requireActivity().onBackPressed()
+                    }else{
+                        //TODO: Go to cart
+                    }
+                }
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    Log.d("TAG", "$t")
+                }
+
+            })
+        }
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            product = it.getSerializable(ARG_PARAM1) as Product
+        }
     }
 }

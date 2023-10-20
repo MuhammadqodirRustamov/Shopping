@@ -26,7 +26,7 @@ interface APIService {
 
 
     @POST("/auth/login")
-    fun search(@Body login: Login): Call<User>
+    fun login(@Body login: Login): Call<User>
 
 
 

@@ -22,8 +22,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:id="@+id/product_screen_back_fab"
-        android:backgroundTint="@color/gray_transparent"
+        android:backgroundTint="@color/black2"
         android:src="@drawable/back_icon"
+        app:tint="@color/white"
         app:elevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

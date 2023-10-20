@@ -11,7 +11,7 @@ import uz.itschool.shopping.model.Product
 
 private const val ARG_PARAM1 = "product"
 class CartFragment : Fragment() {
-    lateinit var product: Product
+    private lateinit var product: Product
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,7 @@ class CartFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val binding = FragmentCartBinding.inflate(inflater, container, false)
 
 

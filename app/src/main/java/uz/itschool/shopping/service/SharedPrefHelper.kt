@@ -1,14 +1,15 @@
 package uz.itschool.shopping.service
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import uz.itschool.shopping.model.User
 
 class SharedPrefHelper private constructor(context: Context){
-    val shared = context.getSharedPreferences("data", 0)
-    val edit = shared.edit()
-    val gson  = Gson()
+    private val shared: SharedPreferences = context.getSharedPreferences("data", 0)
+    private val edit: SharedPreferences.Editor = shared.edit()
+    private val gson  = Gson()
 
 
     companion object{
@@ -21,14 +22,14 @@ class SharedPrefHelper private constructor(context: Context){
 
     fun setUser(user: User){
         val data  = gson.toJson(user)
-        edit.putString("user", data)
+        edit.putString("user", data).apply()
     }
 
     fun logOut(){
-        edit.putString("user", "")
+        edit.putString("user", "").apply()
     }
     fun getUser():User?{
-        var data = shared.getString("user", "")
+        val data = shared.getString("user", "")
         if (data == "") return null
         val typeToken = object : TypeToken<User>() {}.type
         return gson.fromJson(data, typeToken)
