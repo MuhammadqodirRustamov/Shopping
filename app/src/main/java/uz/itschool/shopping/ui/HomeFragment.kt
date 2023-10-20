@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +23,7 @@ import uz.itschool.shopping.model.Product
 import uz.itschool.shopping.model.ProductData
 import uz.itschool.shopping.networking.APIClient
 import uz.itschool.shopping.networking.APIService
+import uz.itschool.shopping.service.SharedPrefHelper
 
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
@@ -38,6 +40,16 @@ class HomeFragment : Fragment() {
 
 
         val api = APIClient.getInstance().create(APIService::class.java)
+        val shared = SharedPrefHelper.getInstance(requireContext())
+        val user = shared.getUser()
+        if (shared != null) binding.homeAvatarIv.load(user.image)
+
+        binding.homeAvatarIv.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable("user", user)
+            findNavController().navigate(R.id.action_productFragment_to_userFragment, bundle)
+        }
+
 
         api.getAll().enqueue(object : Callback<ProductData> {
             override fun onResponse(call: Call<ProductData>, response: Response<ProductData>) {

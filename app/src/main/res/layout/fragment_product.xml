@@ -39,6 +39,7 @@
             android:layout_marginHorizontal="16dp"
             android:orientation="vertical">
             <TextView
+                android:layout_marginTop="16dp"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,6 +54,7 @@
                 android:id="@+id/product_screen_brand"/>
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
+                android:layout_marginTop="6dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:layout_height="wrap_content">
@@ -83,6 +85,8 @@
                     android:textStyle="bold"/>
             </androidx.appcompat.widget.LinearLayoutCompat>
             <TextView
+                android:layout_marginTop="6dp"
+                android:layout_marginHorizontal="6dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="A sa asd asdasdas,mnd a,ms anma,sn dams,nd asm,dnmsnad asdnmas d,masn sam,dn ams,dn as,mdn as,mnd m,asndma,s ndma,sndam,sndasdgvhasgd vashgdva hsgdv ahsgdva shgdasvh dsahg"
@@ -100,7 +104,7 @@
         app:iconGravity="textStart"
         android:textSize="18sp"
         android:layout_marginBottom="8dp"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_marginHorizontal="8dp"
         app:layout_constraintBottom_toBottomOf="parent" />
 
