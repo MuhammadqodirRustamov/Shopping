@@ -93,6 +93,7 @@
             app:elevation="0dp"
             android:backgroundTint="@color/blue"
             app:tint="@color/white"
+            android:id="@+id/product_item_cart_fab"
             android:src="@drawable/cart_icon"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

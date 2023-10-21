@@ -20,6 +20,7 @@ import uz.itschool.shopping.R
 import uz.itschool.shopping.adapter.CategoryAdapter
 import uz.itschool.shopping.adapter.ProductsAdapter
 import uz.itschool.shopping.databinding.FragmentHomeBinding
+import uz.itschool.shopping.model.MyBottomSheet
 import uz.itschool.shopping.model.Product
 import uz.itschool.shopping.model.ProductData
 import uz.itschool.shopping.model.User
@@ -48,7 +49,7 @@ class HomeFragment : Fragment() {
         checkUser()
         setAllProducts()
         setCategories()
-//        setSearchListener()
+        setSearchListener()
         setAvatarClickListener()
         setFilterListener()
 
@@ -126,32 +127,32 @@ class HomeFragment : Fragment() {
         })
     }
 
-//    private fun setSearchListener() {
-//        binding.homeSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                if (query == lastSearch) return false
-//                api.search(query!!).enqueue(object : Callback<ProductData> {
-//                    override fun onResponse(
-//                        call: Call<ProductData>,
-//                        response: Response<ProductData>
-//                    ) {
-//                        val products = response.body()!!.products
-//                        changeProductsAdapter(products)
-//                    }
-//
-//                    override fun onFailure(call: Call<ProductData>, t: Throwable) {
-//                        Log.d("TAG", "$t")
-//                    }
-//
-//                })
-//                lastSearch = query
-//                return true
-//            }
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                return true
-//            }
-//        })
-//    }
+    private fun setSearchListener() {
+        binding.homeSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query == lastSearch) return false
+                api.search(query!!).enqueue(object : Callback<ProductData> {
+                    override fun onResponse(
+                        call: Call<ProductData>,
+                        response: Response<ProductData>
+                    ) {
+                        val products = response.body()!!.products
+                        changeProductsAdapter(products)
+                    }
+
+                    override fun onFailure(call: Call<ProductData>, t: Throwable) {
+                        Log.d("TAG", "$t")
+                    }
+
+                })
+                lastSearch = query
+                return true
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
+    }
 
     private fun setAvatarClickListener() {
         binding.homeAvatarIv.setOnClickListener {
@@ -176,6 +177,19 @@ class HomeFragment : Fragment() {
                         bundle
                     )
                 }
+            }, object : MyBottomSheet.BottomSheetInterface{
+                override fun onAdd(product: Product, quantity: Int) {
+                    val shared = SharedPrefHelper.getInstance(requireContext())
+                    val bundle = Bundle()
+                    bundle.putInt("quantity", quantity)
+                    bundle.putSerializable("product", product)
+                    if (shared.getUser() == null){
+                        findNavController().navigate(R.id.action_homeFragment_to_loginFragment, bundle)
+                    }else{
+                        findNavController().navigate(R.id.action_homeFragment_to_cartFragment, bundle)
+                    }
+                }
+
             })
     }
 

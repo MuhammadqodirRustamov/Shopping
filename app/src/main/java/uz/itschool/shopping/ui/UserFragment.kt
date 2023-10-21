@@ -62,7 +62,7 @@ class UserFragment : Fragment() {
 
     private fun setMyCartListener() {
         binding.userMyCartMb.setOnClickListener {
-            // TODO:
+            findNavController().navigate(R.id.action_userFragment_to_cartFragment)
         }
     }
 

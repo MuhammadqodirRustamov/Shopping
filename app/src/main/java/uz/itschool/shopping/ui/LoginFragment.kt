@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import uz.itschool.shopping.R
 import uz.itschool.shopping.databinding.FragmentLoginBinding
 import uz.itschool.shopping.model.Login
 import uz.itschool.shopping.model.Product
@@ -19,8 +21,10 @@ import uz.itschool.shopping.networking.APIService
 import uz.itschool.shopping.service.SharedPrefHelper
 
 private const val ARG_PARAM1 = "product"
+private const val ARG_PARAM2 = "quantity"
 
 class LoginFragment : Fragment() {
+    private var quantity = 0
     private var product : Product? = null
     private lateinit var binding: FragmentLoginBinding
 
@@ -56,13 +60,16 @@ class LoginFragment : Fragment() {
                         binding.loginPassword.setText("")
                         return
                     }
+                    val shared = SharedPrefHelper.getInstance(requireContext())
+                    val user = response.body()!!
+                    shared.setUser(user)
                     if (product == null){
-                        val shared = SharedPrefHelper.getInstance(requireContext())
-                        val user = response.body()!!
-                        shared.setUser(user)
                         requireActivity().onBackPressed()
                     }else{
-                        //TODO: Go to cart
+                        val bundle = Bundle()
+                        bundle.putSerializable("product", product)
+                        bundle.putInt("quantity", quantity)
+                        findNavController().navigate(R.id.action_loginFragment_to_cartFragment, bundle)
                     }
                 }
 
@@ -79,6 +86,7 @@ class LoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             product = it.getSerializable(ARG_PARAM1) as Product
+            quantity = it.getInt(ARG_PARAM2)
         }
     }
 }

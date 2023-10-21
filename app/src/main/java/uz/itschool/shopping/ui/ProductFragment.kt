@@ -17,7 +17,9 @@ import androidx.navigation.fragment.findNavController
 import uz.itschool.shopping.R
 import uz.itschool.shopping.adapter.ImageAdapter
 import uz.itschool.shopping.databinding.FragmentProductBinding
+import uz.itschool.shopping.model.MyBottomSheet
 import uz.itschool.shopping.model.Product
+import uz.itschool.shopping.service.SharedPrefHelper
 import kotlin.math.roundToInt
 
 private const val ARG_PARAM1 = "product"
@@ -38,6 +40,23 @@ class ProductFragment : Fragment() {
         binding = FragmentProductBinding.inflate(inflater, container, false)
         handleBackPress()
         setView()
+
+        binding.productScreenAddMb.setOnClickListener {
+            MyBottomSheet(requireContext(), product, object : MyBottomSheet.BottomSheetInterface{
+                override fun onAdd(product: Product, quantity: Int) {
+                    val shared = SharedPrefHelper.getInstance(requireContext())
+                    val bundle = Bundle()
+                    bundle.putSerializable("product", product)
+                    bundle.putInt("quantity", quantity)
+                    if (shared.getUser() == null){
+                        findNavController().navigate(R.id.action_productFragment_to_loginFragment, bundle)
+                    }else{
+                        findNavController().navigate(R.id.action_productFragment_to_cartFragment, bundle)
+                    }
+                }
+            })
+        }
+
 
         return binding.root
     }

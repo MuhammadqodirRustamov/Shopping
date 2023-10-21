@@ -98,12 +98,13 @@
 
     <com.google.android.material.button.MaterialButton
         android:layout_width="match_parent"
-        app:cornerRadius="8dp"
+        app:cornerRadius="16dp"
         android:backgroundTint="@color/blue2"
         android:text="Add to cart"
         app:icon="@drawable/cart_icon"
         app:iconGravity="textStart"
         android:textSize="18sp"
+        android:id="@+id/product_screen_add_mb"
         android:layout_marginBottom="8dp"
         android:layout_height="60dp"
         android:layout_marginHorizontal="8dp"
