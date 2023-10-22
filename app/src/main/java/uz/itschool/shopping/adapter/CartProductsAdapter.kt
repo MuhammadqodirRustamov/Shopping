@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import uz.itschool.shopping.R
 import uz.itschool.shopping.model.ProductX
 
-class CartProductsAdapter(private val products : List<ProductX>) : RecyclerView.Adapter<CartProductsAdapter.MyHandler>() {
+class  CartProductsAdapter(private val products : List<ProductX>) : RecyclerView.Adapter<CartProductsAdapter.MyHandler>() {
     inner class MyHandler(itemView: View): RecyclerView.ViewHolder(itemView){
         val title : TextView = itemView.findViewById(R.id.cart_item_title)
         val price : TextView = itemView.findViewById(R.id.cart_item_price)

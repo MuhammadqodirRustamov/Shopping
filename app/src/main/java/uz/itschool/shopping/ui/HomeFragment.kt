@@ -130,8 +130,11 @@ class HomeFragment : Fragment() {
     private fun setSearchListener() {
         binding.homeSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query == lastSearch) return false
-                api.search(query!!).enqueue(object : Callback<ProductData> {
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText == lastSearch) return false
+                api.search(newText!!).enqueue(object : Callback<ProductData> {
                     override fun onResponse(
                         call: Call<ProductData>,
                         response: Response<ProductData>
@@ -145,10 +148,7 @@ class HomeFragment : Fragment() {
                     }
 
                 })
-                lastSearch = query
-                return true
-            }
-            override fun onQueryTextChange(newText: String?): Boolean {
+                lastSearch = newText
                 return true
             }
         })
