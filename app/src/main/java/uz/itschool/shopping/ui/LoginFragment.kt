@@ -64,11 +64,12 @@ class LoginFragment : Fragment() {
                     val user = response.body()!!
                     shared.setUser(user)
                     if (product == null){
-                        requireActivity().onBackPressed()
+                        findNavController().popBackStack()
                     }else{
                         val bundle = Bundle()
                         bundle.putSerializable("product", product)
                         bundle.putInt("quantity", quantity)
+                        bundle.putBoolean("didLogin", true)
                         findNavController().navigate(R.id.action_loginFragment_to_cartFragment, bundle)
                     }
                 }

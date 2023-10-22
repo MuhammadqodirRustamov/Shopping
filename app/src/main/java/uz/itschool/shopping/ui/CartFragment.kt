@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import retrofit2.Call
@@ -29,13 +31,13 @@ class CartFragment : Fragment() {
     private var quantity: Int = 0
     private val api: APIService = APIClient.getInstance().create(APIService::class.java)
     private lateinit var user : User
-
-
+    private var didLogin:Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             product = it.getSerializable(ARG_PARAM1) as Product
             quantity = it.getInt(ARG_PARAM2)
+            didLogin = it.getBoolean("didLogin")
         }
     }
 
@@ -51,6 +53,15 @@ class CartFragment : Fragment() {
         binding.cartBackFab.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         setCart()
         setuser()
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (didLogin){
+                    findNavController().popBackStack()
+                }
+                findNavController().popBackStack()
+            }
+
+        })
         return binding.root
     }
 
