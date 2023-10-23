@@ -41,7 +41,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun setBackButtonListener() {
-        binding.loginBackFab.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
+        binding.loginBackFab.setOnClickListener { findNavController().popBackStack() }
     }
 
     private fun setLoginClickedListener() {
