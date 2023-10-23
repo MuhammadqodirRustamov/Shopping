@@ -2,42 +2,39 @@ package uz.itschool.shopping.ui
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.google.android.material.button.MaterialButton
 import uz.itschool.shopping.R
 import uz.itschool.shopping.databinding.FragmentUserBinding
 import uz.itschool.shopping.model.User
-import uz.itschool.shopping.networking.APIClient
-import uz.itschool.shopping.networking.APIService
 import uz.itschool.shopping.service.SharedPrefHelper
 
-private const val ARG_PARAM1 = "user"
-
 class UserFragment : Fragment() {
-    private var user : User? = null
+    private var user: User? = null
     private lateinit var binding: FragmentUserBinding
-    private val api = APIClient.getInstance().create(APIService::class.java)
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentUserBinding.inflate(inflater, container, false)
-        binding.userBackFab.setOnClickListener { requireActivity().onBackPressed() }
+        binding.userBackFab.setOnClickListener { findNavController().popBackStack() }
 
         checkUser()
 
-        if (user == null){
+        if (user == null) {
             setNoAccount()
-        }else{
+        } else {
             setAccount()
         }
 
@@ -68,31 +65,34 @@ class UserFragment : Fragment() {
 
     private fun setAlert() {
         binding.userLogInOut.setOnClickListener {
+            val alertDialog = AlertDialog.Builder(requireContext()).create()
+            val inflator = this.layoutInflater
+            val view = inflator.inflate(R.layout.log_out_alert, null)
 
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setMessage("Do you really want to log out?")
-
-            builder.setPositiveButton("Yes") { _, _ ->
+            view.findViewById<ImageView>(R.id.alert_image).load(user!!.image)
+            view.findViewById<MaterialButton>(R.id.alert_yes).setOnClickListener {
                 val shared = SharedPrefHelper.getInstance(requireContext())
                 shared.logOut()
                 setNoAccount()
+                alertDialog.dismiss()
             }
-
-            builder.setNegativeButton("No") { dialog, _ ->
-                dialog.dismiss()
+            view.findViewById<MaterialButton>(R.id.alert_no).setOnClickListener {
+                alertDialog.dismiss()
             }
-            builder.show()
+            alertDialog.setView(view)
+            alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.show()
         }
     }
 
     @SuppressLint("SetTextI18n", "UseCompatLoadingForDrawables")
-    private fun setNoAccount(){
-        binding.userAccountInfoParent.visibility =  View.GONE
-        val log:MaterialButton = binding.userLogInOut
+    private fun setNoAccount() {
+        binding.userAccountInfoParent.visibility = View.GONE
+        val log: MaterialButton = binding.userLogInOut
         binding.userNotLoggedInIv.visibility = View.VISIBLE
-        log.setBackgroundColor(resources.getColor(R.color.blue2))
+        log.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.blue2))
         log.text = "Log in"
-        log.icon = resources.getDrawable(R.drawable.login_icon)
+        log.icon = ContextCompat.getDrawable(requireContext(), R.drawable.login_icon)
         log.setOnClickListener {
             findNavController().navigate(R.id.action_userFragment_to_loginFragment)
         }
