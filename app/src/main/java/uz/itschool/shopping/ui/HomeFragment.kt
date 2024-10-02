@@ -20,6 +20,7 @@ import uz.itschool.shopping.R
 import uz.itschool.shopping.adapter.CategoryAdapter
 import uz.itschool.shopping.adapter.ProductsAdapter
 import uz.itschool.shopping.databinding.FragmentHomeBinding
+import uz.itschool.shopping.model.Category
 import uz.itschool.shopping.model.MyBottomSheet
 import uz.itschool.shopping.model.Product
 import uz.itschool.shopping.model.ProductData
@@ -63,8 +64,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setCategories() {
-        api.getCategories().enqueue(object : Callback<List<String>> {
-            override fun onResponse(call: Call<List<String>>, response: Response<List<String>>) {
+        api.getCategories().enqueue(object : Callback<List<Category>> {
+            override fun onResponse(call: Call<List<Category>>, response: Response<List<Category>>) {
                 val categories = response.body()!!
                 binding.homeCategoryRv.adapter = CategoryAdapter(
                     categories,
@@ -107,7 +108,7 @@ class HomeFragment : Fragment() {
                     })
             }
 
-            override fun onFailure(call: Call<List<String>>, t: Throwable) {
+            override fun onFailure(call: Call<List<Category>>, t: Throwable) {
 
             }
 
@@ -118,6 +119,7 @@ class HomeFragment : Fragment() {
         api.getAll().enqueue(object : Callback<ProductData> {
             override fun onResponse(call: Call<ProductData>, response: Response<ProductData>) {
                 val products = response.body()?.products!!
+                Log.d("TAG", "onResponse: ${products}")
                 changeProductsAdapter(products)
             }
 
@@ -192,5 +194,4 @@ class HomeFragment : Fragment() {
 
             })
     }
-
 }

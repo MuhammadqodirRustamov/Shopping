@@ -17,7 +17,7 @@ import uz.itschool.shopping.model.Product
 import uz.itschool.shopping.service.SharedPrefHelper
 import kotlin.math.roundToInt
 
-class ProductsAdapter(var products:List<Product>, private val context: Context, private val productPressed: ProductPressed, private val bottomSheetInterface: MyBottomSheet.BottomSheetInterface) : RecyclerView.Adapter<ProductsAdapter.MyHolder>() {
+class ProductsAdapter(private var products:List<Product>, private val context: Context, private val productPressed: ProductPressed, private val bottomSheetInterface: MyBottomSheet.BottomSheetInterface) : RecyclerView.Adapter<ProductsAdapter.MyHolder>() {
     class MyHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val image : ImageView = itemView.findViewById(R.id.product_item_image)
         val title : TextView = itemView.findViewById(R.id.product_item_title)

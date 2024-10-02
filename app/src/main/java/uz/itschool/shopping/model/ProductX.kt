@@ -2,10 +2,11 @@ package uz.itschool.shopping.model
 
 data class ProductX(
     val discountPercentage: Double,
-    val discountedPrice: Int,
+    val discountedTotal: Double,
     val id: Int,
-    val price: Int,
+    val price: Double,
     val quantity: Int,
+    val thumbnail: String,
     val title: String,
-    val total: Int
+    val total: Double
 )

@@ -14,7 +14,7 @@
         android:id="@+id/user_back_fab"
         app:rippleColor="@color/gray_40"
         android:backgroundTint="@color/white"
-        android:src="@drawable/back_icon"
+        android:src="@drawable/close_icon"
         app:elevation="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

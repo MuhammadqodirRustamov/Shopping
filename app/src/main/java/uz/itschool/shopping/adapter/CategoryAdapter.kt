@@ -10,9 +10,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import uz.itschool.shopping.R
+import uz.itschool.shopping.model.Category
 
 class CategoryAdapter(
-    private val categories: List<String>,
+    private val categories: List<Category>,
     private val context: Context,
     val categoryRecyclerView: RecyclerView,
     private val categoryPressed: CategoryPressed
@@ -39,7 +40,7 @@ class CategoryAdapter(
         if (position == 0) {
             holder.text.text = "All"
         } else {
-            holder.text.text = categories[position - 1].capitalize()
+            holder.text.text = categories[position - 1].name.capitalize()
         }
         if (current == position) {
             holder.cardView.setCardBackgroundColor(context.resources.getColor(R.color.blue2))
@@ -54,7 +55,7 @@ class CategoryAdapter(
                 current = position
                 notifyItemChanged(current)
                 if (position == 0) categoryPressed.onPressed("")
-                else categoryPressed.onPressed(categories[position - 1])
+                else categoryPressed.onPressed(categories[position - 1].slug)
             }
             categoryRecyclerView.visibility = View.GONE
         }

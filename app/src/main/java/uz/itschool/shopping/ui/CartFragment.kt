@@ -25,13 +25,14 @@ import uz.itschool.shopping.service.SharedPrefHelper
 
 private const val ARG_PARAM1 = "product"
 private const val ARG_PARAM2 = "quantity"
+
 class CartFragment : Fragment() {
     var product: Product? = null
     private lateinit var binding: FragmentCartBinding
     private var quantity: Int = 0
     private val api: APIService = APIClient.getInstance().create(APIService::class.java)
-    private lateinit var user : User
-    private var didLogin:Boolean = false
+    private lateinit var user: User
+    private var didLogin: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -49,13 +50,14 @@ class CartFragment : Fragment() {
         user = shared.getUser()!!
 
         binding = FragmentCartBinding.inflate(inflater, container, false)
-        binding.cartRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.cartRecycler.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.cartBackFab.setOnClickListener { requireActivity().onBackPressedDispatcher.onBackPressed() }
         setCart()
         setuser()
         requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (didLogin){
+                if (didLogin) {
                     findNavController().popBackStack()
                 }
                 findNavController().popBackStack()
@@ -74,12 +76,22 @@ class CartFragment : Fragment() {
     }
 
     private fun setCart() {
-        api.getCartsOfUser(user.id).enqueue(object : retrofit2.Callback<CartData>{
+        api.getCartsOfUser(user.id).enqueue(object : retrofit2.Callback<CartData> {
             override fun onResponse(call: Call<CartData>, response: Response<CartData>) {
-                if (response.isSuccessful){
-                    val products = response.body()!!.carts[0].products.toMutableList()
-                    if (product != null){
-                        val productX = ProductX(0.0, 0, product!!.id, product!!.price, quantity, product!!.title, product!!.price * quantity)
+                if (response.isSuccessful) {
+                    val products =
+                        if (response.body()!!.carts.isNotEmpty()) response.body()!!.carts[0].products.toMutableList() else mutableListOf()
+                    if (product != null) {
+                        val productX = ProductX(
+                            0.0,
+                            0.0,
+                            product!!.id,
+                            product!!.price,
+                            quantity,
+                            product!!.thumbnail,
+                            product!!.title,
+                            product!!.price * quantity
+                        )
                         products.add(0, productX)
                     }
                     binding.cartRecycler.adapter = CartProductsAdapter(products)
